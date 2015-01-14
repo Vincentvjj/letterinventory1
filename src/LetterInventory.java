@@ -2,9 +2,9 @@
  * Author: Vincent Jonany
  * Date: 1/10/15
  * Versions : 1.0
- * Section: CS 143AJ
+ * Section: CS143 AJ 
  * Description: Class LetterInventory can be used to store inventory of the 26 letters.
- * 				It can also be used to compare letters inventory with other letters inventory.
+ * 				It can also be used to compare letter inventory with other letters inventory.
  * 				It can also generate the percentage of letters in inventory.
  */
 public class LetterInventory {
@@ -18,9 +18,11 @@ public class LetterInventory {
 	private int totalCount;
 	
 	/*
+	 * Constructs a letter inventory object based on the string passed in.
+	 * The constructor will ignore any non-alphabetic character in the string.
 	 * pre: parameter must be a String. 
-	 * post: constructs a letter inventory object on the String passed in as parameter.
-	 * 		 The constructor will ignore any non-alphabetic character in the string.
+	 * post: letter inventory object will be populated with letter counts based
+	 * 		 on the string parameter passed in. 
 	 */
 	public LetterInventory(String data) {
 		inventory = new int[NUM_OF_LETTERS];
@@ -35,7 +37,9 @@ public class LetterInventory {
 	}
 	
 	/*
-	 * post: the second constructor constructs a letter inventory. 
+	 * Constructs an empty letter inventory object.
+	 * post: the second constructor constructs a letter inventory, and initialize
+	 * 		 total count of the inventory.
 	 */
 	public LetterInventory() {
 		// calls the first constructor with empty string passed in.
@@ -43,17 +47,17 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * A method that convert a letter to a value starting from zero. Ex: 'a' -> 0.
 	 * pre: the parameter passed in must be a character.
-	 * post: a private method to convert the letter passed in to a value that matches
-	 * 		 with the array indexes values. For example, 'a' will become 0. 
+	 * post: returns a converted value of the letter passed in.
 	 */
 	private int countLetterVal(char letter) {
 		return ((int) Character.toLowerCase(letter)) - LETTER_A_SML_VAL;
 	}
 	
 	/*
+	 * A method to check if the letter passed in is alphabetic.
 	 * pre: throws IllegalArgumentException if non-alphabetic character is passed.
-	 * post: a private method to check if the letter passed in is alphabetic.
 	 */
 	private void isLetter(char letter) {
 		if(!Character.isLetter(letter)) {
@@ -62,8 +66,9 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * A method to get the count of a letter in the inventory.
 	 * pre: throws IllegalArgumentException if non-alphabetic character is passed.
-	 * post: returns back the number of that letter which is passed in as parameter in inventory.
+	 * post: returns back the count of that letter in the inventory.
 	 */
 	public int get(char letter) {
 		isLetter(letter);
@@ -71,36 +76,26 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * A method to set the count of the letter by the value passed in as parameter.
+	 * The total count of the inventory will be calculated as value passed in.
 	 * pre: throws IllegalArgumentException if non-alphabetic character or negative values
 	 * 		are passed.
-	 * post: sets the count of the letter for the value passed in. 
-	 * 		 Total count of the letters are calculated. 
+	 * post: The count of the letter will be reset to the value passed in as the parameter.
+	 * 		 The total count will be calculated as the value is set to the letter.
 	 */
 	public void set(char letter, int value) {
-		int tempCount = 0; 
-		int count = 0;
 		isLetter(letter);
 		if(value < 0) {
 			throw new IllegalArgumentException("value is negative");
 		}
 		
-		count =	get(letter);			
+		totalCount -= get(letter);
 		inventory[countLetterVal(letter)] = value;
-		
-		// if the value is 0, it will need to subtract the previous value of that letter from 
-		// the totalCount of the inventory.
-		if(value == 0) {
-			System.out.println("this is the count : " + count);
-			totalCount -= count;
-		}
-		
-		for(int counter : inventory) {
-			tempCount += counter;
-		}
-		totalCount = tempCount;
+		totalCount += value;
 	}
 	
 	/*
+	 * A method to return the size of the inventory.
 	 * post: returns the total count of letters in the inventory.
 	 */
 	public int size() {
@@ -108,6 +103,7 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * Method to check if inventory is empty.
 	 * post: returns true if inventory is empty, or otherwise. 
 	 */
 	public boolean isEmpty() {
@@ -115,8 +111,9 @@ public class LetterInventory {
 	}
 	
 	/*
-	 * post: returns a string as a representation of the inventory, all sorted and lower case.
-	 * 		 String returned will be surrounded by square brackets.
+	 * Returns a string as a representation of the inventory. All Strings will all 
+	 * be sorted and in lower case. 
+	 * post: returns a string to represent the letter inventory.
 	 */
 	public String toString() {
 		String allInventories = "";
@@ -129,10 +126,11 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * A method that gives the result of the sum of this and other letter inventory objects.
+	 * It takes in another letter inventory object to be added together. 
 	 * pre:  a valid LetterInventory object must be passed in. 
-	 * post: returns a new LetterInventory object which is the result of the sum 
-	 * 	  	 of two LetterInventory objects. The counts of each letters from both inventories
-	 * 	     will be added together, and produced in the new LetterInventory object. 
+	 * post: returns a new letter Inventory object which is populated with the
+	 * 	     sum of the counts of the two letter inventory objects for each letters.
 	 */
 	public LetterInventory add(LetterInventory other) {
 		LetterInventory sumInventory = new LetterInventory();
@@ -144,11 +142,12 @@ public class LetterInventory {
 	}
 	
 	/*
+	 * A method that gives the result of the difference of this and other letter inventory objects.
+	 * It takes in another letter inventory object to be subtracted.
 	 * pre:  a valid LetterInventory object must be passed in. 
-	 * post: returns a new LetterInventory object which is the result of the difference 
-	 * 	  	 of two LetterInventory objects. The counts of each letters from both inventories
-	 * 	     will be subtracted, and produced in the new LetterInventory object. 
-	 * 		 Returns null if any of the resulting subtracted value is negative.
+	 * post: returns a new letter Inventory object which is populated with the
+	 * 	     difference of the counts of the two letter inventory objects. 
+	 * 		 It will return null if any of the difference in counts is negative. 
 	 */
 	public LetterInventory subtract(LetterInventory other) {
 		LetterInventory remainingInventory = new LetterInventory();
@@ -165,6 +164,8 @@ public class LetterInventory {
 	}
 
 	/*
+	 * A method that gives the percentage of a letter in the inventory.
+	 * It takes in a letter as a parameter to get the percentage of that letter.
 	 * pre: throws IllegalArgumentException if non-alphabetic character is passed.
 	 * post: returns a double type value of the percentage of that letter in the inventory.
 	 */
